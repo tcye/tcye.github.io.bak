@@ -1,2 +1,6 @@
+.git
 .vscode
+.deploy_git
+db.json
+public
 node_modules
