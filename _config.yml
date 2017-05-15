@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Tiancai
-subtitle:
+title: Tiancai's Blog
+subtitle: Just write for fun
 description:
 author: tcye
-language:
+language: zh-CN
 timezone:
 
 # URL
@@ -74,3 +74,6 @@ deploy:
   repo: https://github.com/tcye/tcye.github.io.git
   branch: master
   message: auto deploy
+
+sitemap:
+  path: sitemap.xml
