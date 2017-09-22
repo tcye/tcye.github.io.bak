@@ -50,7 +50,7 @@ menu:
   #categories: /categories/
   about: /about/
   archives: /archives/
-  tags: /tags/
+  #tags: /tags/
   #sitemap: /sitemap.xml
   #commonweal: /404/
 
@@ -77,10 +77,10 @@ menu_icons:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Muse
-#scheme: Mist
-#scheme: Pisces
-#scheme: Gemini
+# scheme: Muse
+# scheme: Mist
+scheme: Pisces
+# scheme: Gemini
 
 
 # ---------------------------------------------------------------
@@ -90,8 +90,9 @@ scheme: Muse
 # Social Links
 # Key is the link label showing to end users.
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
-#social:
-  #LinkLabel: Link
+social:
+  GitHub: https://github.com/tcye
+  E-Mail: mailto:tiancai.ye@outlook.com
 
 # Social Links Icons
 # Icon Mapping:
@@ -104,17 +105,17 @@ social_icons:
   transition: false
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
-  GitHub: https://github.com/tcye
-  E-Mail: tiancai.ye@outlook.com
-  # Google: google
-  # Twitter: twitter
-  # FB Page: facebook
-  # VK Group: vk
-  # Skype: skype
-  # YouTube: youtube
-  # Instagram: instagram
-  # StackOverflow: stack-overflow
-  # Weibo: weibo
+  GitHub: github
+  E-Mail: envelope
+  Google: google
+  Twitter: twitter
+  FB Page: facebook
+  VK Group: vk
+  Skype: skype
+  YouTube: youtube
+  Instagram: instagram
+  StackOverflow: stack-overflow
+  Weibo: weibo
 
 # Blog rolls
 #links_title: Links
@@ -126,7 +127,7 @@ social_icons:
 # Sidebar Avatar
 # in theme directory(source/images): /images/avatar.jpg
 # in site  directory(source/uploads): /uploads/avatar.jpg
-#avatar:
+avatar: /images/avatar_tcye.jpg
 
 # Table Of Contents in the Sidebar
 toc:
@@ -136,7 +137,7 @@ toc:
   number: true
 
   # If true, all words will placed on next lines if header width longer then sidebar width.
-  wrap: false
+  wrap: true
 
 # Creative Commons 4.0 International License.
 # http://creativecommons.org/
