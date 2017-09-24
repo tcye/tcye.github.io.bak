@@ -53,6 +53,6 @@ int main(int, char**)
 
 ### 插入图片
 ```
-![头像](/images/avatar_tcye.jpg)
+![头像](/avatar.jpg)
 ```
-![头像](/images/avatar_tcye.jpg)
+![头像](/avatar.jpg)
