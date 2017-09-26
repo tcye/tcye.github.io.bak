@@ -24,3 +24,5 @@ date: 2017-05-15 19:19:20
 
 ## Contact
 Email: tiancai.ye@outlook.com
+
+{% cq %} 我没有失败，我只是找到了10000种行不通的方法 ——  *爱迪生* {% endcq %}
