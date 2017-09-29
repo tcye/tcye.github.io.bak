@@ -20,6 +20,7 @@ categories: 机器学习
     * 引入Dropout防止过拟合
     * 引入Max-Pooling技术
     * 使用双GPU，分group卷积，显著减少训练时间
+<!-- more -->
 3. Network In Network(2013):
     * 首次提出在卷积层后再紧跟一个1x1的卷积核对特征进行融合，有效合并卷积特征，减少网络参数
     * 违背了LeNet在浅层使用大卷积核的设计原则，但取得了良好效果
