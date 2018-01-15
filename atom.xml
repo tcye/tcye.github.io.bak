@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Tiancai&#39;s Blog</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://tcye.github.io/"/>
+  <updated>2018-01-15T10:19:36.685Z</updated>
+  <id>http://tcye.github.io/</id>
+  
+  <author>
+    <name>Tiancai Ye</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>减小模型大小的一些设计思路</title>
+    <link href="http://tcye.github.io/2018/01/15/deep-learning/01-%E5%87%8F%E5%B0%8F%E6%A8%A1%E5%9E%8B%E5%A4%A7%E5%B0%8F%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/"/>
+    <id>http://tcye.github.io/2018/01/15/deep-learning/01-减小模型大小的一些设计思路/</id>
+    <published>2018-01-15T10:00:00.000Z</published>
+    <updated>2018-01-15T10:19:36.685Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="暴力channel维度的缩减"><a href="#暴力channel维度的缩减" class="headerlink" title="暴力channel维度的缩减"></a>暴力channel维度的缩减</h2><p>将layer的输入输出在原网络结构上按相同比例缩减。例如nsfw就是在resnet-50的基础上缩减而来的。</p><h2 id="bottlenect结构"><a href="#bottlenect结构" class="headerlink" title="bottlenect结构"></a>bottlenect结构</h2><p>使用1x1的卷积核对原输入降维后，再进行大卷积核的卷积计算。</p><h2 id="group卷积"><a href="#group卷积" class="headerlink" title="group卷积"></a>group卷积</h2><p>分组卷积先按channel分为多个group，每个group内分别做卷积，group的输出再concat，最后使用1x1的卷积把所有group信息综合起来。（resnext思想，shufflenet进行了改进）</p><h2 id="depthwise卷积"><a href="#depthwise卷积" class="headerlink" title="depthwise卷积"></a>depthwise卷积</h2><p>group卷积的特例，group数量等于输入channel数量，即分别对每个channel做卷积，不考虑channel之间的相关性，然后再由1x1的卷积获取跨通道之间相关性的联系。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;暴力channel维度的缩减&quot;&gt;&lt;a href=&quot;#暴力channel维度的缩减&quot; class=&quot;headerlink&quot; title=&quot;暴力channel维度的缩减&quot;&gt;&lt;/a&gt;暴力channel维度的缩减&lt;/h2&gt;&lt;p&gt;将layer的输入输出在原网络结构上按相同比
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="http://tcye.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="机器学习" scheme="http://tcye.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CNN卷积神经网络架构总结</title>
+    <link href="http://tcye.github.io/2017/09/29/deep-learning/00-CNN%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%E6%80%BB%E7%BB%93/"/>
+    <id>http://tcye.github.io/2017/09/29/deep-learning/00-CNN卷积神经网络架构总结/</id>
+    <published>2017-09-29T05:30:35.000Z</published>
+    <updated>2018-01-15T10:04:39.613Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>注：本文将会以论文读后笔记的形式呈现，后续不断补充占坑</strong></p><h2 id="An-Analysis-Of-Deep-Neural-Network-Models-For-Practical-Applications"><a href="#An-Analysis-Of-Deep-Neural-Network-Models-For-Practical-Applications" class="headerlink" title="An Analysis Of Deep Neural Network Models For Practical Applications"></a>An Analysis Of Deep Neural Network Models For Practical Applications</h2><p>在此综述下总结下2015年前的主流CNN架构及其贡献</p><ol><li>LeNet5(1998):<ul><li>CNN三特性: 局部感知、下采样、权值共享</li><li>采用三层架构：卷积、下采样、非线性激活函数(tanh, sigmoid)，多层神经网络(MLP)作为最后的分类器</li><li>后续的CNN架构大多基于LeNet5的这些特性，然而由于当时硬件计算能力限制，后续很长时间神经网络没有发展</li></ul></li><li>AlexNet(2012): 赢的2012ImageNet冠军，从LeNet5的5层增加到7层<ul><li>使用ReLU作为激活函数，降低计算量</li><li>引入Dropout防止过拟合</li><li>引入Max-Pooling技术</li><li>使用双GPU，分group卷积，显著减少训练时间<a id="more"></a></li></ul></li><li>Network In Network(2013):<ul><li>首次提出在卷积层后再紧跟一个1x1的卷积核对特征进行融合，有效合并卷积特征，减少网络参数</li><li>违背了LeNet在浅层使用大卷积核的设计原则，但取得了良好效果</li></ul></li><li>VGG(2014):<ul><li>相比AlexNet使用9x9,11x11这样的大卷积核，VGG使用连续的3x3卷积核，可以获得同样的感受野，而参数数量和计算量可以显著减少</li></ul></li><li>GoogleNet(2014):<ul><li>提出了Inception局部网络，并通过堆积Inception这样的局部小网络组成大网络</li><li>类似NiN，使用了1x1的卷积核大幅减少参数数量和计算，即现在的流行的bottlenect layer</li><li>Bottlenect Layer: 先使用1x1卷积减少特征channel数量，再进行卷积，最后再用1x1卷积恢复特征数量，成功的原因是输入特征是相关的，可以适当的用1x1卷积去除冗余</li></ul></li><li>Inception V3(2015):<ul><li>提出Batch-Normalization，对层的输入进行归一化，有助于训练</li></ul></li></ol><p>最后，使用论文中的一张神图结束这篇论文的笔记，准确率-时间复杂度-参数数量都在下图中很好的呈现了。<img src="/images/acc_vs_net_vs_ops.png" alt="acc-ops"></p><p>2015年前的架构及贡献大致如此，目前更多的都是基于ResNet思想的架构，采用Identity-Map的结构，利于训练超深卷积神经网络</p><h2 id="ResNet"><a href="#ResNet" class="headerlink" title="ResNet"></a>ResNet</h2><p>增加神经网络的宽度有助于于记忆，深度有助于推理。人们发现增加神经网络的深度可以提升效果，但是网络越深，梯度消失的现象越明显，使得网络越发难以训练好。Resnet解决的问题就是，如何在加深网络的情况下，又能解决梯度消失的问题。Renset引入了残差网络来解决这一问题。进一步分析，实际上Resnet相当于一个多人投票系统，具体分析可见<a href="http://blog.csdn.net/buyi_shizi/article/details/53336192" target="_blank" rel="external">对Resnet的理解</a></p><h2 id="Wide-ResNet"><a href="#Wide-ResNet" class="headerlink" title="Wide ResNet"></a>Wide ResNet</h2><p>增加模型宽度（即简单的扩大output channel的数量）有助于提升模型效果。提供了另外一个思路，但效果有限。</p><h2 id="DenseNet"><a href="#DenseNet" class="headerlink" title="DenseNet"></a>DenseNet</h2><h2 id="Dual-Path-Networks-DPNs"><a href="#Dual-Path-Networks-DPNs" class="headerlink" title="Dual Path Networks (DPNs)"></a>Dual Path Networks (DPNs)</h2><h2 id="Squeeze-and-Excitation-Networks-SENet"><a href="#Squeeze-and-Excitation-Networks-SENet" class="headerlink" title="Squeeze-and-Excitation Networks (SENet)"></a>Squeeze-and-Excitation Networks (SENet)</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;注：本文将会以论文读后笔记的形式呈现，后续不断补充占坑&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;An-Analysis-Of-Deep-Neural-Network-Models-For-Practical-Applications&quot;&gt;&lt;a href=&quot;#An-Analysis-Of-Deep-Neural-Network-Models-For-Practical-Applications&quot; class=&quot;headerlink&quot; title=&quot;An Analysis Of Deep Neural Network Models For Practical Applications&quot;&gt;&lt;/a&gt;An Analysis Of Deep Neural Network Models For Practical Applications&lt;/h2&gt;&lt;p&gt;在此综述下总结下2015年前的主流CNN架构及其贡献&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;LeNet5(1998):&lt;ul&gt;
+&lt;li&gt;CNN三特性: 局部感知、下采样、权值共享&lt;/li&gt;
+&lt;li&gt;采用三层架构：卷积、下采样、非线性激活函数(tanh, sigmoid)，多层神经网络(MLP)作为最后的分类器&lt;/li&gt;
+&lt;li&gt;后续的CNN架构大多基于LeNet5的这些特性，然而由于当时硬件计算能力限制，后续很长时间神经网络没有发展&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;AlexNet(2012): 赢的2012ImageNet冠军，从LeNet5的5层增加到7层&lt;ul&gt;
+&lt;li&gt;使用ReLU作为激活函数，降低计算量&lt;/li&gt;
+&lt;li&gt;引入Dropout防止过拟合&lt;/li&gt;
+&lt;li&gt;引入Max-Pooling技术&lt;/li&gt;
+&lt;li&gt;使用双GPU，分group卷积，显著减少训练时间
+    
+    </summary>
+    
+      <category term="机器学习" scheme="http://tcye.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="机器学习" scheme="http://tcye.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>转行心路历程</title>
+    <link href="http://tcye.github.io/2017/09/25/life/00-%E8%BD%AC%E8%A1%8C%E5%BF%83%E8%B7%AF%E5%8E%86%E7%A8%8B/"/>
+    <id>http://tcye.github.io/2017/09/25/life/00-转行心路历程/</id>
+    <published>2017-09-25T08:30:35.000Z</published>
+    <updated>2018-01-15T09:43:07.707Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/images/aic_screenshot.jpg" alt="aic">首先截图留恋！</p><p>当然，这个冠军可能随时会被刷下来，在这里我只是想记录下自己入门深度学习的过程，一来给自己这段时间的工作做一个总结，二来如果能帮助到其他正在学习和准备入坑的小伙伴，那自然是更好不过。</p><a id="more"></a><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>2017年8月28日，我正式入职Bigo Live，离开曾经奋斗了两年的网易游戏，从零开始，转行做了一名机器学习算法工程师。至于为什么我会突然转行去做机器学习，我在<a href="https://tcye.github.io/about/"><strong>这里</strong></a>有写到。总之，2017年对于我是动荡的一年，结了婚（哈哈，从此家里多了一只小燕子），买了房，然后还换了工作，这所有一切都发生在短短几个月内。其实结婚买房前，我都是想好好继续在网易游戏干下去的，毕竟收入不错也还算稳定，工作室有着极其活跃的氛围和宽松简单的人际关系（虽然加班有点多）。然而了解我的人就知道，我从来不是一个安于现状的人，在6月份的某一天，我就决定了，我要转行去做AI！</p><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>其实对于机器学习我是有一定基础的，然而从毕业开始算，已时隔两年，期间做了两年3D MMO手游，可想而知，即使我能把知识全放进一块移动硬盘保存起来，现在想找到那块移动硬盘，恐怕也有点费力了。。。</p><p>第一步，数学基础。复习了一遍线性代数，教材<a href="http://math.mit.edu/~gs/linearalgebra/" target="_blank" rel="external">Introduction to Linear Algebra</a>，因为上研时读过这本书，所以捡起来比较快，我大概花了一个周末两天时间过了一遍线代。然后就没有了，其实对于机器学习，有线代基础就足以入门了，其他数学知识并非必须，比如概率论，我认为只是对于机器学习理论的一种解释而已，如果你只是把机器学习当做一个拟合已有数据的优化问题，那么暂时不管概率论也完全没问题，更何况有些模型，比如神经网络，本来也没有一个概率上的解释。</p><p>第二步，机器学习基础。使用了李航的<a href="https://book.douban.com/subject/10590856/" target="_blank" rel="external">统计学习方法</a>，同时配合周志华的<a href="https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/MLbook2016.htm" target="_blank" rel="external">西瓜书</a>。注意：《统计学习方法》的第一章非常重要！一定要仔细阅读，确保自己理解到位了，尤其是统计学习三要素，这是后面所有模型的基础。然后要重点理解线性回归、逻辑斯蒂回归、SVM，并尝试梳理三者的联系和关系！一旦这一步做到位了，对于后面神经网络的学习将会大有裨益。</p><p>第三步，深度学习。真的，这一步啥都不要看，如果你没有任何基础的话，老老实实从stanford的<a href="http://cs231n.stanford.edu/syllabus.html" target="_blank" rel="external">cs231n</a>的视频一路看下来即可。这一步其实我走了很多弯路，最后才发现，cs231n才是良心啊！有热心朋友已经从墙外把视频搬到了<a href="https://www.bilibili.com/video/av13260183/?from=search&amp;seid=3316462347725890303" target="_blank" rel="external">哔哩哔哩</a>，大家认真学习即可！真的，看了这个还学不会，你来打我！</p><h2 id="行动"><a href="#行动" class="headerlink" title="行动"></a>行动</h2><p>我认为学习任何事情，都要有实际应用场景才可以，所以不管怎样，我必须先找一份机器学习的工作做起来，否则永远也只是纸上谈兵！广州的互联网氛围还是没有北京好啊，看了下脉脉，在招机器学习岗位的单位大概只有这么几家：腾讯微信、阿里UC、欢聚时代（YY）、图谱科技。</p><p>微信当时正成立了搜索部门，于是找了个中科院的师兄帮忙内推了一下，结果准备不充分，而且他们可能更需要NLP相关的，说研究生的图像相关经历也聊不拢，面了两面挂掉了。。。</p><p>阿里UC有推荐相关的岗位，然而并没有人帮忙内推，投了官网简历了无音讯。。。</p><p>图谱科技主要做深度学习鉴黄相关的，理论上应该蛮对口，然而并不认识人。。。去拉钩投了他们的一份简历，过了大概一两周才给了回复，不是让我去面试，是让我先做一份在线笔试题。。。由于当时已经差不多快拿到BIGO的Offer了，所以我就没有尝试了。</p><p>最后自然就是BIGO啦，给新公司打个广告，BIGO是YY的海外直播产品成立的独立子公司，最近刚融到C轮，财力应该是很雄厚，最近也在不停的招兵买马，欢迎大家投简历哦。其实还是很感谢BIGO的研发高级总监MaYue哥的，在我没有机器学习相关工作经历的情况下，收了我并让我如愿进入机器学习算法组。</p><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>最近这段时间的变动暂时记录到这里，希望以后能有更多进步吧，同时总结更多算法方面的经验到博客中。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;/images/aic_screenshot.jpg&quot; alt=&quot;aic&quot;&gt;
+首先截图留恋！&lt;/p&gt;
+&lt;p&gt;当然，这个冠军可能随时会被刷下来，在这里我只是想记录下自己
+入门深度学习的过程，一来给自己这段时间的工作做一个总结，二来如果能帮助到其他正
+在学习和准备入坑的小伙伴，那自然是更好不过。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="生活杂想" scheme="http://tcye.github.io/categories/%E7%94%9F%E6%B4%BB%E6%9D%82%E6%83%B3/"/>
+    
+    
+      <category term="机器学习" scheme="http://tcye.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>常用Markdown语法备忘</title>
+    <link href="http://tcye.github.io/2017/05/15/misc/00-%E5%B8%B8%E7%94%A8Markdown%E8%AF%AD%E6%B3%95%E5%A4%87%E5%BF%98/"/>
+    <id>http://tcye.github.io/2017/05/15/misc/00-常用Markdown语法备忘/</id>
+    <published>2017-05-15T05:30:35.000Z</published>
+    <updated>2018-01-15T08:53:27.842Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h3><p>行间</p><p>$$a = b^2$$</p><p>行内公式\(a = b^2\)</p><h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">char</span>**)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">&#125;</div></pre></td></tr></table></figure><a id="more"></a><h3 id="文本居中引用"><a href="#文本居中引用" class="headerlink" title="文本居中引用"></a>文本居中引用</h3><blockquote class="blockquote-center"><p>人的一切痛苦，本质上都是对自己无能的愤怒。</p><p><strong>王小波</strong></p></blockquote><h3 id="标注"><a href="#标注" class="headerlink" title="标注"></a>标注</h3><div class="note default"><p>Content (md partial supported) </p></div><div class="note primary"><p>Content (md partial supported) </p></div><div class="note success"><p>Content (md partial supported) </p></div><div class="note info"><p>Content (md partial supported) </p></div><div class="note warning"><p>Content (md partial supported) </p></div><div class="note danger"><p>Content (md partial supported) </p></div><h3 id="手动分割显示更多"><a href="#手动分割显示更多" class="headerlink" title="手动分割显示更多"></a>手动分割显示更多</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- more --&gt;</div></pre></td></tr></table></figure><h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Hexo](https://hexo.io/)</div></pre></td></tr></table></figure><p><a href="https://hexo.io/" target="_blank" rel="external">Hexo</a></p><h3 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![头像](/avatar.jpg)</div></pre></td></tr></table></figure><p><img src="/avatar.jpg" alt="头像"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;公式&quot;&gt;&lt;a href=&quot;#公式&quot; class=&quot;headerlink&quot; title=&quot;公式&quot;&gt;&lt;/a&gt;公式&lt;/h3&gt;&lt;p&gt;行间&lt;/p&gt;
+&lt;p&gt;$$a = b^2$$&lt;/p&gt;
+&lt;p&gt;行内公式\(a = b^2\)&lt;/p&gt;
+&lt;h3 id=&quot;代码&quot;&gt;&lt;a href=&quot;#代码&quot; class=&quot;headerlink&quot; title=&quot;代码&quot;&gt;&lt;/a&gt;代码&lt;/h3&gt;&lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;#&lt;span class=&quot;meta-keyword&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;meta-string&quot;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;, &lt;span class=&quot;keyword&quot;&gt;char&lt;/span&gt;**)&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="markdown" scheme="http://tcye.github.io/categories/markdown/"/>
+    
+    
+      <category term="markdown" scheme="http://tcye.github.io/tags/markdown/"/>
+    
+  </entry>
+  
+</feed>
